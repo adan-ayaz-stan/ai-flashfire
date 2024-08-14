@@ -2,6 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face {
+  font-family: "Cartwheel";
+  src: url(../public/cartwheel.otf) format("opentype");
+}
+
 @layer base {
   :root {
     --background: 0 0% 100%;
@@ -63,20 +68,28 @@
   * {
     @apply border-border;
   }
+
+  html {
+    font-size: 18px;
+  }
+
   body {
     @apply bg-background text-foreground;
   }
 
   h1 {
-    @apply scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl;
+    font-family: "Cartwheel", sans-serif;
+    @apply scroll-m-20 text-4xl font-extrabold lg:text-5xl;
   }
 
   h2 {
-    @apply scroll-m-20 text-3xl font-semibold tracking-tight first:mt-0;
+    font-family: "Cartwheel", sans-serif;
+    @apply scroll-m-20 text-3xl font-semibold first:mt-0;
   }
 
   h3 {
-    @apply scroll-m-20 text-2xl font-semibold tracking-tight;
+    font-family: "Cartwheel", sans-serif;
+    @apply scroll-m-20 text-2xl font-semibold;
   }
 
   h4 {
