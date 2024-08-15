@@ -20,7 +20,7 @@ export default function Home() {
         </h1>
 
         {/*  */}
-        <div className="flex flex-col gap-20 lg:flex-row justify-between gap-6 w-full max-w-5xl p-4 mx-auto mt-40 px-16">
+        <div className="flex flex-col lg:flex-row justify-between gap-6 w-full max-w-5xl p-4 mx-auto mt-40 px-16">
           <div className="rounded-2xl flex flex-col items-center">
             <Image
               src={"/book-illust.png"}

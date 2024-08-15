@@ -3,6 +3,7 @@ import { Dosis, Inter } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { ClerkProvider } from "@clerk/nextjs";
+import { Toaster } from "@/components/ui/sonner";
 import Providers from "./providers";
 
 const dosis = Dosis({ subsets: ["latin"] });
@@ -57,6 +58,7 @@ export default function RootLayout({
               disableTransitionOnChange
             >
               {children}
+              <Toaster />
             </ThemeProvider>
           </body>
         </ClerkProvider>
