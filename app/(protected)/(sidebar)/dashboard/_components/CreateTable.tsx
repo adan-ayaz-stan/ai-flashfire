@@ -25,7 +25,7 @@ import {
 } from "@/components/ui/dialog";
 import { toast } from "sonner";
 import { useMutation } from "@tanstack/react-query";
-import { createTable } from "../_actions/tables.action";
+import { createTable } from "../../../../../server/actions/tables.action";
 import { Loader } from "lucide-react";
 
 const formSchema = z.object({

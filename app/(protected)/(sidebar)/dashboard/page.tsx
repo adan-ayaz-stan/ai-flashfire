@@ -9,23 +9,17 @@ import AllTables from "./_components/AllTables";
 
 export default function Dashboard() {
   return (
-    <div className="min-h-screen pl-72">
-      <Navbar />
+    <>
+      {/* Action Bar */}
+      <div className="w-full flex items-center mb-4">
+        <h2 className="mr-auto">Tables</h2>
 
-      <Sidebar />
-
-      <div className="border-2 border-black min-h-screen p-4 pt-20 space-y-4">
-        {/* Action Bar */}
-        <div className="w-full flex items-center">
-          <h2 className="mr-auto">Tables</h2>
-
-          {/*  */}
-          <CreateTable />
-        </div>
-
-        {/* Cards */}
-        <AllTables />
+        {/*  */}
+        <CreateTable />
       </div>
-    </div>
+
+      {/* Cards */}
+      <AllTables />
+    </>
   );
 }

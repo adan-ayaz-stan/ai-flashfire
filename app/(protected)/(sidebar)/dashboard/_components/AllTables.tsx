@@ -1,7 +1,7 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import { getAllTables } from "../_actions/tables.action";
+import { getAllTables } from "../../../../../server/actions/tables.action";
 import { Loader } from "lucide-react";
 import Table from "./Table";
 
@@ -51,7 +51,7 @@ export default function AllTables() {
   }
 
   return (
-    <div className="w-full flex flex-row gap-4">
+    <div className="w-full flex flex-row flex-wrap gap-4">
       {isSuccess &&
         data.map((ele) => {
           return <Table key={ele.id} data={ele} />;

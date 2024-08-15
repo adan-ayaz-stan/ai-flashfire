@@ -6,6 +6,7 @@ import { auth } from "@clerk/nextjs/server";
 import {
   collection,
   doc,
+  getDoc,
   getDocs,
   query,
   setDoc,
@@ -27,7 +28,10 @@ export async function createTable(title: string) {
 
   try {
     // Format title - replace all spaces with _
-    const fTitle = title.replace(/ /g, "_");
+    const fTitle = title
+      .replace(/[^a-zA-Z0-9\s]/g, "")
+      .replace(/ /g, "_")
+      .toLowerCase();
 
     //
     const slug = fTitle + "-" + userId + "-" + Date.now();
@@ -69,13 +73,34 @@ export async function getAllTables() {
     const tables = await getDocs(q);
 
     const data = tables.docs.map((ele) => {
-      const d = ele.data() as TTable;
+      const d = ele.data();
 
       return {
         id: ele.id,
         ...d,
-      };
+      } as TTable;
     });
+
+    return data;
+  } catch (err) {
+    throw err;
+  }
+}
+
+export async function getTable(table_id: string) {
+  const { userId } = auth();
+
+  if (!userId) {
+    throw new Error("User not authenticated");
+  }
+
+  try {
+    //
+    const table = await getDoc(doc(db, "tables", table_id));
+    const data = {
+      id: table.id,
+      ...table.data(),
+    } as TTable;
 
     return data;
   } catch (err) {
