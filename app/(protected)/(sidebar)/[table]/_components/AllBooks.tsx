@@ -7,28 +7,9 @@ import { getAllBooks } from "@/server/actions/books.action";
 
 export default function AllBooks({ table_id }: { table_id: string }) {
   const { data, isLoading, isSuccess, isError, error } = useQuery({
-    queryKey: ["book", "all"],
+    queryKey: ["book", "all", table_id],
     queryFn: () => getAllBooks(table_id),
-    initialData: [
-      {
-        id: "som-dv-v92",
-        userId: "2f3r21421",
-        slug: "this_is_card-2f3r21421",
-        title: "Demo Book",
-        table_id: table_id,
-        createdAt: Date.now().toString(),
-        updatedAt: Date.now().toString(),
-      },
-      {
-        id: "som-dv-v2592",
-        userId: "2f3124r21421",
-        slug: "this_is5_card-32f3r214121",
-        title: "University Book",
-        table_id: table_id,
-        createdAt: Date.now().toString(),
-        updatedAt: Date.now().toString(),
-      },
-    ],
+    initialData: [],
   });
 
   if (isLoading) {

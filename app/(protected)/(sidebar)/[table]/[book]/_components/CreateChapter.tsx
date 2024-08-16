@@ -79,7 +79,7 @@ export default function CreateChapter({
   return (
     <Dialog>
       <DialogTrigger>
-        <Button>Add Chapter</Button>
+        <Button variant={"outline"}>Add Chapter</Button>
       </DialogTrigger>
       <DialogContent>
         <DialogClose ref={dialogRef} className="hidden" />

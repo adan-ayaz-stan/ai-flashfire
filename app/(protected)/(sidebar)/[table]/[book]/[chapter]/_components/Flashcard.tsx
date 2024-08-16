@@ -1,8 +1,15 @@
 import { TFlashcard } from "@/types/flashcards";
 import { useState } from "react";
 import { motion } from "framer-motion";
+import { cn } from "@/lib/utils";
 
-export default function Flashcard({ data }: { data: TFlashcard }) {
+export default function Flashcard({
+  data,
+  questionClassName,
+}: {
+  data: TFlashcard;
+  questionClassName?: string;
+}) {
   const [isReveal, setReveal] = useState(false);
 
   function toggleReveal() {
@@ -12,9 +19,9 @@ export default function Flashcard({ data }: { data: TFlashcard }) {
   return (
     <div
       onClick={toggleReveal}
-      className="min-w-80 aspect-video p-4 relative cursor-pointer"
+      className="min-w-80 max-w-sm min-h-60 max-h-80 flex flex-col p-4 relative cursor-pointer"
     >
-      <motion.div className="absolute top-2 right-2 flex w-full h-full bg-coolWhite text-davy rounded-xl px-4">
+      <motion.div className="absolute max-h-80 overflow-y-auto scrollbar-none top-2 right-2 flex w-full h-full bg-coolWhite text-davy rounded-xl px-4">
         {/*  */}
         <h4 className="m-auto text-center">{data.answer}</h4>
         {/*  */}
@@ -24,7 +31,10 @@ export default function Flashcard({ data }: { data: TFlashcard }) {
             scale: isReveal ? 1 : [0, 1],
             y: isReveal ? [0, 50] : 0,
           }}
-          className="absolute top-0 left-0 flex w-full h-full bg-fire rounded-xl z-10 p-4 text-white"
+          className={cn(
+            "absolute top-0 left-0 flex w-full h-full bg-fire rounded-xl z-10 p-4 text-white",
+            questionClassName
+          )}
         >
           <h3 className="m-auto text-center tracking-wider">{data.question}</h3>
         </motion.div>

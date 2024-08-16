@@ -74,7 +74,7 @@ export default function CreateTable({
   return (
     <Dialog>
       <DialogTrigger>
-        <Button>Create Table</Button>
+        <Button variant="outline">Create Table</Button>
       </DialogTrigger>
       <DialogContent>
         <DialogClose ref={dialogRef} className="hidden" />

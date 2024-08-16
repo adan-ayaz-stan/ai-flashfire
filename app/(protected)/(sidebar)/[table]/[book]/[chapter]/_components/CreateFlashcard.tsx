@@ -90,8 +90,10 @@ export default function CreateFlashcard({
 
   return (
     <Dialog>
-      <DialogTrigger>
-        <Button>Add Flashcard</Button>
+      <DialogTrigger className="w-full md:w-fit">
+        <Button variant={"outline"} className="w-full">
+          Add Flashcard
+        </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogClose ref={dialogRef} className="hidden" />

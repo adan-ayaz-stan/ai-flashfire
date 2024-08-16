@@ -9,24 +9,7 @@ export default function AllTables() {
   const { data, isLoading, isSuccess, isError, error } = useQuery({
     queryKey: ["table", "all"],
     queryFn: () => getAllTables(),
-    initialData: [
-      {
-        id: "som-dv-v92",
-        userId: "2f3r21421",
-        slug: "this_is_card-2f3r21421",
-        title: "Demo Table",
-        createdAt: Date.now().toString(),
-        updatedAt: Date.now().toString(),
-      },
-      {
-        id: "som-dv-v2592",
-        userId: "2f3124r21421",
-        slug: "this_is5_card-32f3r214121",
-        title: "University Group",
-        createdAt: Date.now().toString(),
-        updatedAt: Date.now().toString(),
-      },
-    ],
+    initialData: [],
   });
 
   if (isLoading) {
