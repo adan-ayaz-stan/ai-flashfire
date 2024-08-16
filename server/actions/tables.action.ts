@@ -6,6 +6,7 @@ import { auth } from "@clerk/nextjs/server";
 import {
   collection,
   doc,
+  getCountFromServer,
   getDoc,
   getDocs,
   query,
@@ -82,6 +83,26 @@ export async function getAllTables() {
     });
 
     return data;
+  } catch (err) {
+    throw err;
+  }
+}
+
+export async function getTablesCount() {
+  const { userId } = auth();
+
+  if (!userId) {
+    throw new Error("User not authenticated");
+  }
+
+  try {
+    //
+    const q = query(collection(db, "tables"), where("userId", "==", userId));
+    const snap = await getCountFromServer(q);
+
+    const count = snap.data().count
+
+    return count;
   } catch (err) {
     throw err;
   }
