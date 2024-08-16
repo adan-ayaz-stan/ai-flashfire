@@ -13,6 +13,15 @@ import {
   where,
 } from "firebase/firestore";
 
+/**
+ * Creates a new chapter in the database with the given title and book ID.
+ *
+ * @param {Object} params - The parameters for creating the chapter.
+ * @param {string} params.title - The title of the chapter.
+ * @param {string} params.book_id - The ID of the book the chapter belongs to.
+ * @return {Promise<string>} A promise that resolves to a success message if the chapter is created successfully.
+ * @throws {Error} If the user is not authenticated.
+ */
 export async function createChapter({
   title,
   book_id,
@@ -56,6 +65,13 @@ export async function createChapter({
   }
 }
 
+/**
+ * Retrieves all chapters from the database that belong to the currently authenticated user and have the specified book ID.
+ *
+ * @param {string} book_id - The ID of the book.
+ * @return {Promise<TChapter[]>} An array of chapters, each containing the chapter's ID and data.
+ * @throws {Error} If the user is not authenticated.
+ */
 export async function getAllChapters(book_id: string) {
   const { userId } = auth();
 
@@ -70,9 +86,9 @@ export async function getAllChapters(book_id: string) {
       where("userId", "==", userId),
       where("book_id", "==", book_id)
     );
-    const books = await getDocs(q);
+    const chapters = await getDocs(q);
 
-    const data = books.docs.map((ele) => {
+    const data = chapters.docs.map((ele) => {
       const d = ele.data();
 
       return {
@@ -87,6 +103,12 @@ export async function getAllChapters(book_id: string) {
   }
 }
 
+/**
+ * Retrieves a chapter from the database by its ID.
+ *
+ * @param {string} chapter_id - The ID of the chapter to retrieve.
+ * @return {TChapter} The retrieved chapter data, including its ID and other properties.
+ */
 export async function getChapter(chapter_id: string) {
   const { userId } = auth();
 
@@ -101,6 +123,33 @@ export async function getChapter(chapter_id: string) {
       id: table.id,
       ...table.data(),
     } as TChapter;
+
+    return data;
+  } catch (err) {
+    throw err;
+  }
+}
+
+export async function getAllUserChapters() {
+  const { userId } = auth();
+
+  if (!userId) {
+    throw new Error("User not authenticated");
+  }
+
+  try {
+    //
+    const q = query(collection(db, "chapters"), where("userId", "==", userId));
+    const chapters = await getDocs(q);
+
+    const data = chapters.docs.map((ele) => {
+      const d = ele.data();
+
+      return {
+        id: ele.id,
+        ...d,
+      } as TChapter;
+    });
 
     return data;
   } catch (err) {

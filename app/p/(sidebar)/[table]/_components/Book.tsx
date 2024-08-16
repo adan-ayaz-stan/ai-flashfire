@@ -5,7 +5,7 @@ import Link from "next/link";
 export default function Book({ data }: { data: TBook }) {
   return (
     <Link
-      href={"/" + data.table_id + "/" + data.id}
+      href={"/p/" + data.table_id + "/" + data.id}
       className="relative p-4 w-full max-w-sm rounded-lg bg-coolWhite"
     >
       <Image
