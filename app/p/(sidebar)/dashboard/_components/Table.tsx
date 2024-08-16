@@ -9,7 +9,7 @@ export default function Table({ data }: { data: TTable }) {
 
   return (
     <Link
-      href={"/" + data.id}
+      href={"/p/" + data.id}
       className="w-full relative max-w-sm p-4 border-red-500 border-2 rounded-md overflow-y-hidden group"
     >
       <Image
