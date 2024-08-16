@@ -6,9 +6,11 @@ export default function TestChapterLink({ data }: { data: TChapter }) {
   return (
     <div className="p-4 border-2 border-fire flex flex-col rounded-xl space-y-4">
       <h4>{data.title}</h4>
-      <Button variant={"secondary"} className="ml-auto">
-        Test Me
-      </Button>
+      <Link href={"/api/test/chapter/" + data.id}>
+        <Button variant={"secondary"} className="ml-auto">
+          Test Me
+        </Button>
+      </Link>
     </div>
   );
 }

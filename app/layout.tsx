@@ -50,7 +50,7 @@ export default function RootLayout({
     <html lang="en">
       <Providers>
         <ClerkProvider>
-          <body className={dosis.className}>
+          <body className={dosis.className} suppressHydrationWarning>
             <ThemeProvider
               attribute="class"
               defaultTheme="system"
