@@ -24,7 +24,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { toast } from "sonner";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { createTable } from "../../../../../server/actions/tables.action";
 import { Loader } from "lucide-react";
 
@@ -40,6 +40,7 @@ export default function CreateTable({
   ...props
 }: TCreateTable) {
   const dialogRef = useRef<HTMLButtonElement>(null);
+  const queryClient = useQueryClient();
 
   // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
@@ -69,6 +70,9 @@ export default function CreateTable({
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
     await create(values.table_name);
+    await queryClient.invalidateQueries({
+      queryKey: ["table", "all"],
+    });
   }
 
   return (

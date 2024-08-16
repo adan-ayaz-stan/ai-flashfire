@@ -156,7 +156,7 @@ export default function CreateAIFlashcards({
       id: "flashcards-generate",
     });
     await queryClient.invalidateQueries({
-      queryKey: ["flashcard", "all"],
+      queryKey: ["flashcard", "all", chapter_id],
     });
 
     dialogRef.current?.click();

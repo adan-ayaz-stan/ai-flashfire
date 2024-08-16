@@ -24,7 +24,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { toast } from "sonner";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Loader } from "lucide-react";
 import { createBook } from "@/server/actions/books.action";
 
@@ -43,6 +43,7 @@ export default function CreateBook({
   ...props
 }: TCreateBook) {
   const dialogRef = useRef<HTMLButtonElement>(null);
+  const queryClient = useQueryClient();
 
   // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
@@ -74,6 +75,9 @@ export default function CreateBook({
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
     await create({ title: values.book_name, table_id });
+    await queryClient.invalidateQueries({
+      queryKey: ["book", "all", table_id],
+    });
   }
 
   return (
