@@ -24,7 +24,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { toast } from "sonner";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Loader } from "lucide-react";
 import { createChapter } from "@/server/actions/chapters.action";
 import { createFlashcard } from "@/server/actions/flashcards.action";
@@ -45,6 +45,7 @@ export default function CreateFlashcard({
   ...props
 }: TCreateFlashcard) {
   const dialogRef = useRef<HTMLButtonElement>(null);
+  const queryClient = useQueryClient();
 
   // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
@@ -85,6 +86,9 @@ export default function CreateFlashcard({
       question: values.question,
       answer: values.answer,
       chapter_id: chapter_id,
+    });
+    await queryClient.invalidateQueries({
+      queryKey: ["flashcard", "all", chapter_id],
     });
   }
 
