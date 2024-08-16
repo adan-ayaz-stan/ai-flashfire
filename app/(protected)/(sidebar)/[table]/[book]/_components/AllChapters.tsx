@@ -9,35 +9,7 @@ export default function AllChapters({ book_id }: { book_id: string }) {
   const { data, isLoading, isSuccess, isError, error } = useQuery({
     queryKey: ["chapter", "all"],
     queryFn: () => getAllChapters(book_id),
-    initialData: [
-      {
-        id: "cellitscomponents-user_2ZiyRhtpdUVa6oKLVNoASqRCt0x-1723712470505",
-        book_id: "biology_2-user_2ZiyRhtpdUVa6oKLVNoASqRCt0x-1723712470505",
-        createdAt: 1723715843845,
-        slug: "cellitscomponents-user_2ZiyRhtpdUVa6oKLVNoASqRCt0x-1723715843845",
-        title: "Cell & It's Components",
-        updatedAt: 1723715843845,
-        userId: "user_2ZiyRhtpdUVa6oKLVNoASqRCt0x",
-      },
-      {
-        id: "moleculesandcompounds-user_4XKjpjVPDAVB6pMleVfGtRlOx-1723712470506",
-        book_id: "chemistry_3-user_4XKjpjVPDAVB6pMleVfGtRlOx-1723712470506",
-        createdAt: 1723715844845,
-        slug: "moleculesandcompounds-user_4XKjpjVPDAVB6pMleVfGtRlOx-1723715844845",
-        title: "Molecules and Compounds",
-        updatedAt: 1723715844845,
-        userId: "user_4XKjpjVPDAVB6pMleVfGtRlOx",
-      },
-      {
-        id: "mechanics-user_K3dqoLVRPwW9pGtOx-1723712470507",
-        book_id: "physics_1-user_K3dqoLVRPwW9pGtOx-1723712470507",
-        createdAt: 1723715845845,
-        slug: "mechanics-user_K3dqoLVRPwW9pGtOx-1723715845845",
-        title: "Mechanics",
-        updatedAt: 1723715845845,
-        userId: "user_K3dqoLVRPwW9pGtOx",
-      },
-    ],
+    initialData: [],
   });
 
   if (isLoading) {
@@ -64,8 +36,14 @@ export default function AllChapters({ book_id }: { book_id: string }) {
   return (
     <div className="w-full flex flex-row flex-wrap gap-4">
       {isSuccess &&
-        data.map((ele) => {
-          return <Chapter key={ele.id} data={ele} />;
+        data.map((ele, i) => {
+          return (
+            <Chapter
+              key={ele.id}
+              data={ele}
+              className={i % 2 == 0 ? "bg-coolWhite" : "bg-fire text-white"}
+            />
+          );
         })}
     </div>
   );

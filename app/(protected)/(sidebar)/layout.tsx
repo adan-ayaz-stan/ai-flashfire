@@ -8,7 +8,9 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
       <Sidebar />
 
-      <div className="min-h-screen p-4 pt-20">{children}</div>
+      <div className="min-h-screen p-4 pt-24 pb-12">
+        <div className="max-w-5xl mx-auto">{children}</div>
+      </div>
     </div>
   );
 }

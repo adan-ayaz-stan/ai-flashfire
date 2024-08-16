@@ -79,7 +79,7 @@ export default function CreateBook({
   return (
     <Dialog>
       <DialogTrigger>
-        <Button>Create Table</Button>
+        <Button variant={"outline"}>Add Book</Button>
       </DialogTrigger>
       <DialogContent>
         <DialogClose ref={dialogRef} className="hidden" />

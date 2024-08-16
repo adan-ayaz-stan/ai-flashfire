@@ -4,7 +4,7 @@
 
 @font-face {
   font-family: "Cartwheel";
-  src: url(../public/cartwheel.otf) format("opentype");
+  src: url(../public/Englebert-Regular.ttf) format("truetype");
 }
 
 @layer base {

@@ -13,6 +13,15 @@ import {
   where,
 } from "firebase/firestore";
 
+/**
+ * Creates a new flashcard with the given question, answer, and chapter ID.
+ *
+ * @param {object} params - An object containing the question, answer, and chapter ID.
+ * @param {string} params.question - The question for the flashcard.
+ * @param {string} params.answer - The answer for the flashcard.
+ * @param {string} params.chapter_id - The ID of the chapter the flashcard belongs to.
+ * @return {string} A success message if the flashcard is created successfully.
+ */
 export async function createFlashcard({
   question,
   answer,
@@ -52,6 +61,12 @@ export async function createFlashcard({
   }
 }
 
+/**
+ * Retrieves all flashcards from the database that belong to the currently authenticated user and have the specified chapter ID.
+ *
+ * @param {string} chapter_id - The ID of the chapter.
+ * @return {TFlashcard[]} An array of flashcards, each containing the flashcard's ID and data.
+ */
 export async function getAllFlashcards(chapter_id: string) {
   const { userId } = auth();
 
