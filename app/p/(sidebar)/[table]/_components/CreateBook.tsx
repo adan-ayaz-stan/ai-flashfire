@@ -15,7 +15,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { HTMLProps, useRef } from "react";
+import { HTMLProps, useEffect, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
 import {
   Dialog,
@@ -26,7 +26,8 @@ import {
 import { toast } from "sonner";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Loader } from "lucide-react";
-import { createBook } from "@/server/actions/books.action";
+import { createBook, getBooksCount } from "@/server/actions/books.action";
+import PaidModal from "../../dashboard/_components/paidModal";
 
 const formSchema = z.object({
   book_name: z.string().min(2).max(50),
@@ -43,6 +44,7 @@ export default function CreateBook({
   ...props
 }: TCreateBook) {
   const dialogRef = useRef<HTMLButtonElement>(null);
+  const [safe, setSafe] = useState(-1);
   const queryClient = useQueryClient();
 
   // 1. Define your form.
@@ -79,6 +81,26 @@ export default function CreateBook({
       queryKey: ["book", "all", table_id],
     });
   }
+
+  
+  useEffect(()=>{
+    console.log('Checking if safe to create table');
+    getBooksCount(table_id).then((count)=>{
+      setSafe(count<3?1:0);
+    })
+  })
+
+  if(safe==-1)
+  {
+    return <Button variant="outline" disabled>Create Table</Button>
+  }
+  else if(safe==0)
+  {
+    return (<PaidModal featureRequest="You have reached the limit of 3 books. Upgrade to unlock more features.">
+              <Button variant="outline">Create Table</Button>
+          </PaidModal>)
+  }
+
 
   return (
     <Dialog>

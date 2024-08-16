@@ -82,19 +82,16 @@ export default function CreateTable({
   useEffect(()=>{
     console.log('Checking if safe to create table');
     getTablesCount().then((count)=>{
-      console.log('Table Count:',count);
       setSafe(count<3?1:0);
     })
   })
 
   if(safe==-1)
   {
-    console.log('Rendering Loading Button')
-    return <Button variant="outline" className="bg-slate-600">Create Table</Button>
+    return <Button variant="outline" disabled>Create Table</Button>
   }
   else if(safe==0)
   {
-    console.log('Rendering Limit Modal')
     return (<PaidModal featureRequest="You have reached the limit of 3 tables. Upgrade to unlock more features.">
               <Button variant="outline">Create Table</Button>
           </PaidModal>)
