@@ -15,12 +15,12 @@ export default function Home() {
         <Navbar />
 
         {/* Heading */}
-        <h1 className="uppercase text-center text-coolWhite tracking-wider mt-24 mb-16 lg:text-5xl">
+        <h1 className="uppercase text-center text-coolWhite tracking-wider mt-16 mb-8 lg:text-5xl">
           Blitz Learning Never been Easier
         </h1>
 
         {/*  */}
-        <div className="flex flex-col lg:flex-row justify-between gap-6 w-full max-w-5xl p-4 mx-auto mt-40 px-16">
+        <div className="flex flex-col lg:flex-row justify-between gap-6 w-full max-w-5xl p-4 mx-auto mt-24 px-16">
           <div className="rounded-2xl flex flex-col items-center">
             <Image
               src={"/book-illust.png"}
