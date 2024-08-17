@@ -8,6 +8,8 @@ import {
 import { auth } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 
+export const maxDuration = 60;
+
 export async function GET(
   req: Request,
   { params }: { params: { chapter: string } }
