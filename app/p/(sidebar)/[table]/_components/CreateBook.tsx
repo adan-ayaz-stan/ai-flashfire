@@ -44,11 +44,10 @@ export default function CreateBook({
   ...props
 }: TCreateBook) {
   const dialogRef = useRef<HTMLButtonElement>(null);
-  const [safe, setSafe] = useState(-1);
   const queryClient = useQueryClient();
 
   const { data: count } = useQuery({
-    queryKey: ["book", "all", table_id],
+    queryKey: ["book", "all", table_id, "count"],
     queryFn: () => getBooksCount(table_id),
   });
 

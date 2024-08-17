@@ -34,10 +34,7 @@ export default function AllBooks({ table_id }: { table_id: string }) {
 
   return (
     <div className="w-full flex flex-row flex-wrap gap-4">
-      {isSuccess &&
-        data.map((ele) => {
-          return <Book key={ele.id} data={ele} />;
-        })}
+      {isSuccess && data.map((book) => <Book key={book.id} data={book} />)}
     </div>
   );
 }
