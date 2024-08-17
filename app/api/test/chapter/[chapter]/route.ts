@@ -25,7 +25,7 @@ export async function GET(
     // Get test count
     const testCount = await getTotalTestCount();
 
-    if (testCount >= 1) {
+    if (testCount >= 3) {
       return NextResponse.redirect("https://flashfire.vercel.app/pricing");
     }
 
