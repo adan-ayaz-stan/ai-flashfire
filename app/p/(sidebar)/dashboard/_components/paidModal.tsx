@@ -1,8 +1,20 @@
 import { Button } from "@/components/ui/button";
-import { DialogTrigger , Dialog, DialogContent, DialogClose } from "@/components/ui/dialog";
+import {
+  DialogTrigger,
+  Dialog,
+  DialogContent,
+  DialogClose,
+} from "@/components/ui/dialog";
 import { paidFeatures } from "@/lib/constants";
+import Link from "next/link";
 
-export default function PaidModal({featureRequest, children}:{featureRequest:string, children:React.ReactNode}) {
+export default function PaidModal({
+  featureRequest,
+  children,
+}: {
+  featureRequest: string;
+  children: React.ReactNode;
+}) {
   return (
     <Dialog>
       <DialogTrigger>{children}</DialogTrigger>
@@ -21,7 +33,7 @@ export default function PaidModal({featureRequest, children}:{featureRequest:str
               Pro
             </div>
           </div>
-          {features.map((feature, index) => (
+          {paidFeatures.map((feature, index) => (
             <div key={feature.feature + index} className="flex gap-2">
               <div className="flex grow items-center gap-1">
                 {feature.feature}

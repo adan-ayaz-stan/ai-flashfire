@@ -92,7 +92,7 @@ export default function CreateBook({
     return null;
   }
 
-  if (count && count.length >= 3) {
+  if (count && count >= 3) {
     return (
       <PaidModal featureRequest="You have reached the limit of 3 tables. Upgrade to unlock more features.">
         <Button variant="outline">Create Table</Button>
