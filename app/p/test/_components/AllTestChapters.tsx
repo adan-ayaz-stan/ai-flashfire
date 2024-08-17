@@ -9,12 +9,11 @@ export default function AllTestChapters() {
   const { data, isLoading, isSuccess, isError, error } = useQuery({
     queryKey: ["chapter", "all"],
     queryFn: () => getAllUserChapters(),
-    initialData: [],
   });
 
   if (isLoading) {
     return (
-      <div className="p-8 w-fit m-auto flex rounded-xl bg-coolWhite">
+      <div className="p-8 mt-4 w-fit m-auto flex rounded-xl bg-coolWhite text-black">
         <Loader className="animate-spin w-8 h-8 m-auto" />
       </div>
     );
@@ -34,9 +33,10 @@ export default function AllTestChapters() {
   }
   return (
     <div className="w-full flex flex-row flex-wrap gap-4 mt-8">
-      {data.map((chapter) => (
-        <TestChapterLink key={chapter.id} data={chapter} />
-      ))}
+      {data &&
+        data.map((chapter) => (
+          <TestChapterLink key={chapter.id} data={chapter} />
+        ))}
     </div>
   );
 }

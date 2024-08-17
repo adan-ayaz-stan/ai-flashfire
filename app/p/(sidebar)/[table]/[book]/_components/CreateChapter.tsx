@@ -24,7 +24,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { toast } from "sonner";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Loader } from "lucide-react";
 import { createChapter, getChapterCount } from "@/server/actions/chapters.action";
 import PaidModal from "../../../dashboard/_components/paidModal";
@@ -46,6 +46,17 @@ export default function CreateChapter({
   const dialogRef = useRef<HTMLButtonElement>(null);
   const queryClient = useQueryClient();
   const [safe, setSafe] = useState(-1);
+
+  const {
+    data: count,
+    isLoading,
+    isSuccess,
+    isError,
+    error,
+  } = useQuery({
+    queryKey: ["chapter", "all", book_id, "count"],
+    queryFn: () => getChapterCount(book_id),
+  });
 
   // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
@@ -76,30 +87,24 @@ export default function CreateChapter({
   async function onSubmit(values: z.infer<typeof formSchema>) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
+    if (!count || count >= 5) {
+      toast.error("Cannot add more than 5 chapters");
+      return;
+    }
+
     await create({ title: values.chapter_name, book_id });
     await queryClient.invalidateQueries({
       queryKey: ["chapter", "all", book_id],
     });
   }
 
-  useEffect(()=>{
-    getChapterCount(book_id).then((count)=>{
-      setSafe(count<5?1:0);
-    })
-  })
-
-  if(safe==-1)
-  {
-    return <Button variant="outline" disabled>Add Chapter</Button>
+  if (count && count >= 5) {
+    return (
+      <PaidModal featureRequest="You have reached the limit of 5 chapters. Upgrade to unlock more features.">
+        <Button variant="outline">Create Chapter</Button>
+      </PaidModal>
+    );
   }
-  else if(safe==0)
-  {
-    return (<PaidModal featureRequest="You have reached the limit of 5 chapters. Upgrade to unlock more features.">
-              <Button variant="outline">Add Chapter</Button>
-          </PaidModal>)
-  }
-
-
   return (
     <Dialog>
       <DialogTrigger>

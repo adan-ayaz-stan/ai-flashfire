@@ -37,6 +37,12 @@ export async function createBook({
     throw new Error("User not authenticated");
   }
 
+  const bookCount = await getBooksCount(table_id);
+
+  if (bookCount >= 3) {
+    throw new Error("You have reached the maximum number of books");
+  }
+
   try {
     // Format title - replace all spaces with _
     const fTitle = title
@@ -121,15 +127,13 @@ export async function getBooksCount(table_id: string) {
     );
     const snap = await getCountFromServer(q);
 
-    const count = snap.data().count
+    const count = snap.data().count;
 
     return count;
   } catch (err) {
     throw err;
   }
 }
-
-
 
 export async function getBook(book_id: string) {
   const { userId } = auth();

@@ -24,7 +24,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { toast } from "sonner";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Loader } from "lucide-react";
 import { createBook, getBooksCount } from "@/server/actions/books.action";
 import PaidModal from "../../dashboard/_components/paidModal";
@@ -46,6 +46,11 @@ export default function CreateBook({
   const dialogRef = useRef<HTMLButtonElement>(null);
   const [safe, setSafe] = useState(-1);
   const queryClient = useQueryClient();
+
+  const { data: count } = useQuery({
+    queryKey: ["book", "all", table_id],
+    queryFn: () => getBooksCount(table_id),
+  });
 
   // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
@@ -76,30 +81,24 @@ export default function CreateBook({
   async function onSubmit(values: z.infer<typeof formSchema>) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
+
     await create({ title: values.book_name, table_id });
     await queryClient.invalidateQueries({
       queryKey: ["book", "all", table_id],
     });
   }
 
-  
-  useEffect(()=>{
-    getBooksCount(table_id).then((count)=>{
-      setSafe(count<3?1:0);
-    })
-  })
-
-  if(safe==-1)
-  {
-    return <Button variant="outline" disabled>Add Book</Button>
-  }
-  else if(safe==0)
-  {
-    return (<PaidModal featureRequest="You have reached the limit of 3 books. Upgrade to unlock more features.">
-              <Button variant="outline">Add Book</Button>
-          </PaidModal>)
+  if (!count) {
+    return null;
   }
 
+  if (count && count >= 3) {
+    return (
+      <PaidModal featureRequest="You have reached the limit of 3 tables. Upgrade to unlock more features.">
+        <Button variant="outline">Create Table</Button>
+      </PaidModal>
+    );
+  }
 
   return (
     <Dialog>
