@@ -7,7 +7,7 @@ export default function Upgrade({ params }: { params: { test: string } }) {
     
     return (
       <div className="relative">
-        <div className="flex flex-wrap text-fire justify-center items-center p-4 w-screen h-screen absolute top-0 left-0">
+        <div className="flex flex-wrap text-fire justify-center items-center p-4 w-screen h-screen absolute top-0 left-0 overflow-hidden">
             <div className="w-[150%] h-[150%] -rotate-[20deg] absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-40">
                 <Image src='/UpgradeBG.svg' layout="fill" objectFit="contain" objectPosition="center" alt="upgrade Background"/>
             </div>
