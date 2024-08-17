@@ -71,7 +71,6 @@ export default function CreateTable({
   async function onSubmit(values: z.infer<typeof formSchema>) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
-    console.log('Trying to create table: ', values);
     return;
     await create(values.table_name);
     await queryClient.invalidateQueries({
@@ -80,7 +79,6 @@ export default function CreateTable({
   }
 
   useEffect(()=>{
-    console.log('Checking if safe to create table');
     getTablesCount().then((count)=>{
       setSafe(count<3?1:0);
     })

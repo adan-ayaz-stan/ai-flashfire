@@ -15,7 +15,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { HTMLProps, useRef } from "react";
+import { HTMLProps, useEffect, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
 import {
   Dialog,
@@ -26,7 +26,8 @@ import {
 import { toast } from "sonner";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Loader } from "lucide-react";
-import { createChapter } from "@/server/actions/chapters.action";
+import { createChapter, getChapterCount } from "@/server/actions/chapters.action";
+import PaidModal from "../../../dashboard/_components/paidModal";
 
 const formSchema = z.object({
   chapter_name: z.string().min(2).max(50),
@@ -44,6 +45,7 @@ export default function CreateChapter({
 }: TCreateChapter) {
   const dialogRef = useRef<HTMLButtonElement>(null);
   const queryClient = useQueryClient();
+  const [safe, setSafe] = useState(-1);
 
   // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
@@ -79,6 +81,24 @@ export default function CreateChapter({
       queryKey: ["chapter", "all", book_id],
     });
   }
+
+  useEffect(()=>{
+    getChapterCount(book_id).then((count)=>{
+      setSafe(count<5?1:0);
+    })
+  })
+
+  if(safe==-1)
+  {
+    return <Button variant="outline" disabled>Add Chapter</Button>
+  }
+  else if(safe==0)
+  {
+    return (<PaidModal featureRequest="You have reached the limit of 5 chapters. Upgrade to unlock more features.">
+              <Button variant="outline">Add Chapter</Button>
+          </PaidModal>)
+  }
+
 
   return (
     <Dialog>

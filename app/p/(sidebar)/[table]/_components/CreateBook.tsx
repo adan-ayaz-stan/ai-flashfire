@@ -84,7 +84,6 @@ export default function CreateBook({
 
   
   useEffect(()=>{
-    console.log('Checking if safe to create table');
     getBooksCount(table_id).then((count)=>{
       setSafe(count<3?1:0);
     })
@@ -92,12 +91,12 @@ export default function CreateBook({
 
   if(safe==-1)
   {
-    return <Button variant="outline" disabled>Create Table</Button>
+    return <Button variant="outline" disabled>Add Book</Button>
   }
   else if(safe==0)
   {
     return (<PaidModal featureRequest="You have reached the limit of 3 books. Upgrade to unlock more features.">
-              <Button variant="outline">Create Table</Button>
+              <Button variant="outline">Add Book</Button>
           </PaidModal>)
   }
 

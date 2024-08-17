@@ -6,6 +6,7 @@ import { auth } from "@clerk/nextjs/server";
 import {
   collection,
   doc,
+  getCountFromServer,
   getDoc,
   getDocs,
   query,
@@ -98,6 +99,30 @@ export async function getAllChapters(book_id: string) {
     });
 
     return data;
+  } catch (err) {
+    throw err;
+  }
+}
+
+export async function getChapterCount(book_id: string) {
+  const { userId } = auth();
+
+  if (!userId) {
+    throw new Error("User not authenticated");
+  }
+
+  try {
+    //
+    const q = query(
+      collection(db, "chapters"),
+      where("userId", "==", userId),
+      where("book_id", "==", book_id)
+    );
+    const snap = await getCountFromServer(q);
+
+    const count = snap.data().count
+
+    return count;
   } catch (err) {
     throw err;
   }
