@@ -87,7 +87,9 @@ export default function CreateBook({
     });
   }
 
-  if (!count) {
+  console.log(count);
+
+  if (count == undefined) {
     return null;
   }
 
