@@ -3,6 +3,7 @@ import { getAllFlashcards } from "@/server/actions/flashcards.action";
 import {
   createNewTest,
   generateTestQuestionsFromFlashcards,
+  getTotalTestCount,
 } from "@/server/actions/test.action";
 import { auth } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
@@ -21,6 +22,13 @@ export async function GET(
   const { chapter: chapter_id } = params;
 
   try {
+    // Get test count
+    const testCount = await getTotalTestCount();
+
+    if (testCount >= 1) {
+      return NextResponse.redirect("https://flashfire.vercel.app/pricing");
+    }
+
     // Get flashcards from chapter
     const flashcards = await getAllFlashcards(chapter_id);
     const chapter = await getChapter(chapter_id);
@@ -60,6 +68,6 @@ export async function GET(
 
     return NextResponse.redirect(process.env.BASE_URL + "/p/dashboard");
   } catch (err) {
-    return new NextResponse("Internal Server Error", { status: 500 });
+    return new NextResponse("Internal Server Error: " + err, { status: 500 });
   }
 }

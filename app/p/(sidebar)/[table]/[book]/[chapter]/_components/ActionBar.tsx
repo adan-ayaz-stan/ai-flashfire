@@ -6,7 +6,11 @@ import Link from "next/link";
 export default function ActionBar({ chapter_id }: { chapter_id: string }) {
   return (
     <div className="p-4 bg-coolWhite w-full flex flex-col md:flex-row items-center my-4 gap-2 rounded-xl">
-      <Link className="mr-auto" href={"/api/test/chapter/" + chapter_id}>
+      <Link
+        prefetch={false}
+        className="mr-auto"
+        href={"/api/test/chapter/" + chapter_id}
+      >
         <Button variant={"red"}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
