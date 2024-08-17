@@ -174,7 +174,9 @@ export async function getChapterCount(book_id: string) {
     );
     const snap = await getCountFromServer(q);
 
-    return snap.data().count;
+    const count = snap.data().count;
+
+    return count;
   } catch (err) {
     throw err;
   }

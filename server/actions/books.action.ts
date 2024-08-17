@@ -37,7 +37,7 @@ export async function createBook({
     throw new Error("User not authenticated");
   }
 
-  const bookCount = await getBooksCount();
+  const bookCount = await getBooksCount(table_id);
 
   if (bookCount >= 3) {
     throw new Error("You have reached the maximum number of books");
@@ -111,6 +111,30 @@ export async function getAllBooks(table_id: string) {
   }
 }
 
+export async function getBooksCount(table_id: string) {
+  const { userId } = auth();
+
+  if (!userId) {
+    throw new Error("User not authenticated");
+  }
+
+  try {
+    //
+    const q = query(
+      collection(db, "books"),
+      where("userId", "==", userId),
+      where("table_id", "==", table_id)
+    );
+    const snap = await getCountFromServer(q);
+
+    const count = snap.data().count;
+
+    return count;
+  } catch (err) {
+    throw err;
+  }
+}
+
 export async function getBook(book_id: string) {
   const { userId } = auth();
 
@@ -127,28 +151,6 @@ export async function getBook(book_id: string) {
     } as TBook;
 
     return data;
-  } catch (err) {
-    throw err;
-  }
-}
-
-export async function getBooksCount() {
-  const { userId } = auth();
-
-  if (!userId) {
-    throw new Error("User not authenticated");
-  }
-
-  try {
-    //
-    const q = query(collection(db, "books"));
-    const snap = await getCountFromServer(q);
-
-    const count = snap.data().count;
-
-    console.log(snap);
-
-    return count;
   } catch (err) {
     throw err;
   }

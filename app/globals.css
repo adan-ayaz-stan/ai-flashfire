@@ -99,4 +99,13 @@
   p {
     @apply leading-7;
   }
+
+}
+
+.upgradeBGIcon{
+  transition: all 0.1s ease;
+}
+
+.upgradeBGIcon:hover{
+  transform: scale(1.2) translateY(-0.5rem);
 }

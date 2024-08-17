@@ -83,8 +83,7 @@ export default function CreateTable({
       queryKey: ["table", "all"],
     });
   }
-
-  if (count && count >= 3) {
+ if (count && count >= 3) {
     return (
       <PaidModal featureRequest="You have reached the limit of 3 tables. Upgrade to unlock more features.">
         <Button variant="outline">Create Table</Button>

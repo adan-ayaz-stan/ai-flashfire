@@ -15,7 +15,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { HTMLProps, useRef } from "react";
+import { HTMLProps, useEffect, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
 import {
   Dialog,
@@ -26,10 +26,7 @@ import {
 import { toast } from "sonner";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Loader } from "lucide-react";
-import {
-  createChapter,
-  getChapterCount,
-} from "@/server/actions/chapters.action";
+import { createChapter, getChapterCount } from "@/server/actions/chapters.action";
 import PaidModal from "../../../dashboard/_components/paidModal";
 
 const formSchema = z.object({
@@ -48,6 +45,7 @@ export default function CreateChapter({
 }: TCreateChapter) {
   const dialogRef = useRef<HTMLButtonElement>(null);
   const queryClient = useQueryClient();
+  const [safe, setSafe] = useState(-1);
 
   const {
     data: count,
@@ -107,7 +105,6 @@ export default function CreateChapter({
       </PaidModal>
     );
   }
-
   return (
     <Dialog>
       <DialogTrigger>
