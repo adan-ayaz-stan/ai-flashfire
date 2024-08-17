@@ -104,6 +104,8 @@ export async function getAllBooks(table_id: string) {
   }
 }
 
+
+
 export async function getBook(book_id: string) {
   const { userId } = auth();
 

@@ -89,6 +89,26 @@ export async function getAllTables() {
   }
 }
 
+export async function getTablesCount() {
+  const { userId } = auth();
+
+  if (!userId) {
+    throw new Error("User not authenticated");
+  }
+
+  try {
+    //
+    const q = query(collection(db, "tables"), where("userId", "==", userId));
+    const snap = await getCountFromServer(q);
+
+    const count = snap.data().count
+
+    return count;
+  } catch (err) {
+    throw err;
+  }
+}
+
 export async function getTable(table_id: string) {
   const { userId } = auth();
 
