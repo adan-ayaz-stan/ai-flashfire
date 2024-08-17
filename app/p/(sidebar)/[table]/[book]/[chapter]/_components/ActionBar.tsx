@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import CreateAIFlashcards from "./CreateAIFlashcards";
 import CreateFlashcard from "./CreateFlashcard";
 import Link from "next/link";
+import { toast } from "sonner";
 
 export default function ActionBar({ chapter_id }: { chapter_id: string }) {
   return (
@@ -9,6 +10,13 @@ export default function ActionBar({ chapter_id }: { chapter_id: string }) {
       <Link
         prefetch={false}
         className="mr-auto"
+        onClick={() => {
+          toast.loading("Generating test... ", {
+            id: "create-test",
+            description:
+              "Test is dependent on number of flashcards, please wait...",
+          });
+        }}
         href={"/api/test/chapter/" + chapter_id}
       >
         <Button variant={"red"}>
