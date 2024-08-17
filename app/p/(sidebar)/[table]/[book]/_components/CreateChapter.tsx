@@ -26,7 +26,10 @@ import {
 import { toast } from "sonner";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Loader } from "lucide-react";
-import { createChapter, getChapterCount } from "@/server/actions/chapters.action";
+import {
+  createChapter,
+  getChapterCount,
+} from "@/server/actions/chapters.action";
 import PaidModal from "../../../dashboard/_components/paidModal";
 
 const formSchema = z.object({
@@ -87,7 +90,7 @@ export default function CreateChapter({
   async function onSubmit(values: z.infer<typeof formSchema>) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
-    if (!count || count >= 5) {
+    if (count == undefined || count >= 5) {
       toast.error("Cannot add more than 5 chapters");
       return;
     }
