@@ -7,6 +7,7 @@ import { auth } from "@clerk/nextjs/server";
 import {
   collection,
   doc,
+  getCountFromServer,
   getDoc,
   getDocs,
   query,
@@ -34,6 +35,12 @@ export async function createBook({
 
   if (!userId) {
     throw new Error("User not authenticated");
+  }
+
+  const bookCount = await getBooksCount();
+
+  if (bookCount >= 3) {
+    throw new Error("You have reached the maximum number of books");
   }
 
   try {
@@ -104,8 +111,6 @@ export async function getAllBooks(table_id: string) {
   }
 }
 
-
-
 export async function getBook(book_id: string) {
   const { userId } = auth();
 
@@ -122,6 +127,28 @@ export async function getBook(book_id: string) {
     } as TBook;
 
     return data;
+  } catch (err) {
+    throw err;
+  }
+}
+
+export async function getBooksCount() {
+  const { userId } = auth();
+
+  if (!userId) {
+    throw new Error("User not authenticated");
+  }
+
+  try {
+    //
+    const q = query(collection(db, "books"));
+    const snap = await getCountFromServer(q);
+
+    const count = snap.data().count;
+
+    console.log(snap);
+
+    return count;
   } catch (err) {
     throw err;
   }

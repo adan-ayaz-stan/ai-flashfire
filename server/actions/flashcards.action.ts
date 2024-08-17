@@ -8,6 +8,7 @@ import {
   collection,
   doc,
   getDocs,
+  orderBy,
   query,
   setDoc,
   where,
@@ -79,7 +80,8 @@ export async function getAllFlashcards(chapter_id: string) {
     const q = query(
       collection(db, "flashcards"),
       where("userId", "==", userId),
-      where("chapter_id", "==", chapter_id)
+      where("chapter_id", "==", chapter_id),
+      orderBy("createdAt", "desc")
     );
     const books = await getDocs(q);
 

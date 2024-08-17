@@ -5,6 +5,7 @@ import {
   DialogContent,
   DialogClose,
 } from "@/components/ui/dialog";
+import Link from "next/link";
 
 export default function PaidModal({
   featureRequest,
@@ -49,9 +50,28 @@ export default function PaidModal({
               <div className="w-20 p-2 text-center">{feature.paid}</div>
             </div>
           ))}
-          <Button className="w-[max-content] self-center mt-4 px-10">
-            Upgrade
-          </Button>
+
+          <Dialog>
+            <DialogTrigger>
+              <Button className="w-[max-content] self-center mt-4 px-10">
+                Upgrade
+              </Button>
+            </DialogTrigger>
+            <DialogContent>
+              <p className="text-lg">
+                Automatic Upgrade is unavailable at the moment. <br />
+                <br /> Please contact{" "}
+                <Link
+                  href={"mailto:adanayaztracer@gmail.com"}
+                  className="font-bold text-fire underline"
+                  title="adanayaztracer@gmail.com"
+                >
+                  Spitfire
+                </Link>{" "}
+                to upgrade manually.
+              </p>
+            </DialogContent>
+          </Dialog>
         </div>
       </DialogContent>
     </Dialog>

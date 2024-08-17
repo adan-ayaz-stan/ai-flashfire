@@ -25,7 +25,10 @@ import {
 } from "@/components/ui/dialog";
 import { toast } from "sonner";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { createTable, getTablesCount } from "../../../../../server/actions/tables.action";
+import {
+  createTable,
+  getTablesCount,
+} from "../../../../../server/actions/tables.action";
 import { Loader } from "lucide-react";
 import PaidModal from "./paidModal";
 
@@ -71,35 +74,31 @@ export default function CreateTable({
   async function onSubmit(values: z.infer<typeof formSchema>) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
-    console.log('Trying to create table: ', values);
-    return;
     await create(values.table_name);
     await queryClient.invalidateQueries({
       queryKey: ["table", "all"],
     });
   }
 
-  useEffect(()=>{
-    console.log('Checking if safe to create table');
-    getTablesCount().then((count)=>{
-      console.log('Table Count:',count);
-      setSafe(count<3?1:0);
-    })
-  })
+  useEffect(() => {
+    getTablesCount().then((count) => {
+      setSafe(count < 3 ? 1 : 0);
+    });
+  });
 
-  if(safe==-1)
-  {
-    console.log('Rendering Loading Button')
-    return <Button variant="outline" className="bg-slate-600">Create Table</Button>
+  if (safe == -1) {
+    return (
+      <Button variant="outline" className="bg-slate-600">
+        Create Table
+      </Button>
+    );
+  } else if (safe == 0) {
+    return (
+      <PaidModal featureRequest="You have reached the limit of 3 tables. Upgrade to unlock more features.">
+        <Button variant="outline">Create Table</Button>
+      </PaidModal>
+    );
   }
-  else if(safe==0)
-  {
-    console.log('Rendering Limit Modal')
-    return (<PaidModal featureRequest="You have reached the limit of 3 tables. Upgrade to unlock more features.">
-              <Button variant="outline">Create Table</Button>
-          </PaidModal>)
-  }
-
 
   return (
     <Dialog>
