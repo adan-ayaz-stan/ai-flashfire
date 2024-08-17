@@ -9,7 +9,6 @@ export default function AllTables() {
   const { data, isLoading, isSuccess, isError, error } = useQuery({
     queryKey: ["table", "all"],
     queryFn: () => getAllTables(),
-    initialData: [],
   });
 
   if (isLoading) {

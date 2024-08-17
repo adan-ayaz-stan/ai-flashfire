@@ -10,6 +10,7 @@ import { randomUUID } from "crypto";
 import {
   collection,
   doc,
+  getCountFromServer,
   getDoc,
   getDocs,
   query,
@@ -174,6 +175,26 @@ export async function getTest(testId: string) {
   try {
     const test = await getDoc(doc(db, "tests", testId));
     return test.data() as TTest;
+  } catch (err) {
+    throw err;
+  }
+}
+
+export async function getTotalTestCount() {
+  const { userId } = auth();
+
+  if (!userId) {
+    throw new Error("User not authenticated");
+  }
+
+  try {
+    const q = query(collection(db, "tests"), where("userId", "==", userId));
+
+    const snap = await getCountFromServer(q);
+
+    const count = snap.data().count;
+
+    return count;
   } catch (err) {
     throw err;
   }

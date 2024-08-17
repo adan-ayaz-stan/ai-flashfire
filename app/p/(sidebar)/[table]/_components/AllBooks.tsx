@@ -9,7 +9,6 @@ export default function AllBooks({ table_id }: { table_id: string }) {
   const { data, isLoading, isSuccess, isError, error } = useQuery({
     queryKey: ["book", "all", table_id],
     queryFn: () => getAllBooks(table_id),
-    initialData: [],
   });
 
   if (isLoading) {

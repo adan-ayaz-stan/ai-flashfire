@@ -24,7 +24,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { toast } from "sonner";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   createTable,
   getTablesCount,
@@ -44,8 +44,12 @@ export default function CreateTable({
   ...props
 }: TCreateTable) {
   const dialogRef = useRef<HTMLButtonElement>(null);
-  const [safe, setSafe] = useState(-1);
   const queryClient = useQueryClient();
+
+  const { data: count } = useQuery({
+    queryKey: ["table", "all", "count"],
+    queryFn: () => getTablesCount(),
+  });
 
   // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
@@ -80,19 +84,7 @@ export default function CreateTable({
     });
   }
 
-  useEffect(() => {
-    getTablesCount().then((count) => {
-      setSafe(count < 3 ? 1 : 0);
-    });
-  });
-
-  if (safe == -1) {
-    return (
-      <Button variant="outline" className="bg-slate-600">
-        Create Table
-      </Button>
-    );
-  } else if (safe == 0) {
+  if (count && count >= 3) {
     return (
       <PaidModal featureRequest="You have reached the limit of 3 tables. Upgrade to unlock more features.">
         <Button variant="outline">Create Table</Button>
