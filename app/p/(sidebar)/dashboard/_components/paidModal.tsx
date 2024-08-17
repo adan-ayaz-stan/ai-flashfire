@@ -1,16 +1,11 @@
 
 import { Button } from "@/components/ui/button";
 import { DialogTrigger , Dialog, DialogContent, DialogClose } from "@/components/ui/dialog";
+import { paidFeatures } from "@/lib/constants";
 
 export default function PaidModal({featureRequest, children}:{featureRequest:string, children:React.ReactNode}) {
 
-    const features = [
-        {feature:"Table Creation Limit", free:"3", paid:"No Limit"},
-        {feature:"Book Creation Limit", free:"3", paid:"No Limit"},
-        {feature:"Chapter Creation Limit", free:"5", paid:"No Limit"},
-        {feature:"AI Flashcard Generation Limit", free:"5", paid:"No Limit"},
-        {feature:"Support Priority", free:"Standard", paid:"Hgih"},
-    ]
+   
   return (
     <Dialog>
       <DialogTrigger>
@@ -27,8 +22,8 @@ export default function PaidModal({featureRequest, children}:{featureRequest:str
                     <div className="w-[1px] h-full bg-fire"></div>
                     <div className="w-20 p-2 text-center bg-fire bg-opacity-50 rounded-lg text-white">Pro</div>
             </div>
-            {features.map((feature, index) => (
-                <div className="flex gap-2">
+            {paidFeatures.map((feature, index) => (
+                <div className="flex gap-2" key={index}>
                     <div className="flex grow items-center gap-1">{feature.feature}</div>
                     <div className="w-[1px] h-full bg-fire"></div>
                     <div className="w-20 p-2 text-center ">{feature.free}</div>
