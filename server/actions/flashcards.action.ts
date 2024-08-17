@@ -7,6 +7,7 @@ import { randomUUID } from "crypto";
 import {
   collection,
   doc,
+  getCountFromServer,
   getDocs,
   orderBy,
   query,
@@ -95,6 +96,30 @@ export async function getAllFlashcards(chapter_id: string) {
     });
 
     return data;
+  } catch (err) {
+    throw err;
+  }
+}
+
+export async function getFlashcardsCount(chapter_id: string) {
+  const { userId } = auth();
+
+  if (!userId) {
+    throw new Error("User not authenticated");
+  }
+
+  try {
+    //
+    const q = query(
+      collection(db, "flashcards"),
+      where("userId", "==", userId),
+      where("chapter_id", "==", chapter_id)
+    );
+    const books = await getCountFromServer(q);
+
+    const count = books.data().count;
+
+    return count;
   } catch (err) {
     throw err;
   }
