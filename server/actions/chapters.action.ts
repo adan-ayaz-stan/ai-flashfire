@@ -181,3 +181,25 @@ export async function getAllUserChapters() {
     throw err;
   }
 }
+
+export async function getChapterCount(book_id: string) {
+  const { userId } = auth();
+
+  if (!userId) {
+    throw new Error("User not authenticated");
+  }
+
+  try {
+    //
+    const q = query(
+      collection(db, "chapters"),
+      where("userId", "==", userId),
+      where("book_id", "==", book_id)
+    );
+    const snap = await getCountFromServer(q);
+
+    return snap.data().count;
+  } catch (err) {
+    throw err;
+  }
+}

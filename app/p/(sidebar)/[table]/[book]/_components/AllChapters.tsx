@@ -9,7 +9,6 @@ export default function AllChapters({ book_id }: { book_id: string }) {
   const { data, isLoading, isSuccess, isError, error } = useQuery({
     queryKey: ["chapter", "all", book_id],
     queryFn: () => getAllChapters(book_id),
-    initialData: [],
   });
 
   if (isLoading) {

@@ -9,7 +9,6 @@ export default function AllFlashcards({ chapter_id }: { chapter_id: string }) {
   const { data, isLoading, isSuccess, isError, error } = useQuery({
     queryKey: ["flashcard", "all", chapter_id],
     queryFn: () => getAllFlashcards(chapter_id),
-    initialData: [],
   });
 
   if (isLoading) {
