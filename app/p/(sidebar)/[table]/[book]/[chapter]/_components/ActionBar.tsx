@@ -30,6 +30,7 @@ export default function ActionBar({ chapter_id }: { chapter_id: string }) {
               id: "create-test",
               description:
                 "Test is dependent on number of flashcards, please wait...",
+              duration: 10000,
             });
           }}
           href={data >= 10 ? "/api/test/chapter/" + chapter_id : "#"}
