@@ -256,6 +256,8 @@ const manageSubscriptionStatusChange = async (
     expand: ["default_payment_method"],
   });
 
+  console.log("Subscription update date:", subscription.current_period_end);
+
   // Upsert the latest status of the subscription object.
   const subscriptionData = {
     id: subscription.id,
