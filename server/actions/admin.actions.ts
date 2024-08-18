@@ -2,7 +2,6 @@
 
 import { stripe } from "@/lib/payment/stripe";
 import { Price, Product } from "@/types/stripe";
-import { auth } from "@clerk/nextjs/server";
 import Stripe from "stripe";
 import { db } from "@/lib/db/firebase";
 import {
@@ -119,6 +118,9 @@ const upsertCustomerToFirebase = async (uuid: string, customerId: string) => {
 const createCustomerInStripe = async (uuid: string, email: string) => {
   const customerData = { metadata: { firebaseUUID: uuid }, email: email };
   const newCustomer = await stripe.customers.create(customerData);
+
+  console.log("Creating new customer in Stripe:", newCustomer);
+
   if (!newCustomer) throw new Error("Stripe customer creation failed.");
 
   return newCustomer.id;
@@ -142,22 +144,29 @@ const createOrRetrieveCustomer = async ({
   email: string;
   uuid: string;
 }) => {
+  console.log("Running function: Create or Retrieve Customer");
+
   try {
     // Check if the customer already exists in db
     const customerDb = await getDoc(doc(db, "customers", uuid));
     if (customerDb.exists()) {
+      console.log("Customer exists");
       return customerDb.data().stripe_customer_id;
     }
 
     // Retrieve the Stripe customer ID using the Firebase customer ID, with email fallback
     let stripeCustomerId: string | undefined;
     if (customerDb.data()?.stripe_customer_id) {
+      console.log("Retrieving customer through stripe.customers.retrieve");
       const existingStripeCustomer = await stripe.customers.retrieve(
         customerDb.data()?.stripe_customer_id
       );
       stripeCustomerId = existingStripeCustomer.id;
     } else {
       // If Stripe ID is missing from Firebase, try to retrieve Stripe customer ID by email
+      console.log(
+        "Customer is missing Stripe ID. Retrieving customer through stripe w/ email via stripe.customers.list"
+      );
       const stripeCustomers = await stripe.customers.list({ email: email });
       stripeCustomerId =
         stripeCustomers.data.length > 0
@@ -165,32 +174,42 @@ const createOrRetrieveCustomer = async ({
           : undefined;
     }
 
+    console.log("Stripe customer ID:", stripeCustomerId);
+
     // If still no stripeCustomerId, create a new customer in Stripe
     const stripeIdToInsert = stripeCustomerId
       ? stripeCustomerId
       : await createCustomerInStripe(uuid, email);
-    if (!stripeIdToInsert) throw new Error("Stripe customer creation failed.");
 
+    if (!stripeIdToInsert) {
+      console.log("Stripe customer creation failed.");
+      throw new Error("Stripe customer creation failed.");
+    }
+
+    stripeCustomerId = stripeIdToInsert;
+
+    console.log("Updated stripe customer ID:", stripeCustomerId);
     //
     if (customerDb.exists() && stripeCustomerId) {
+      console.log("Updating customer in Firebase");
       // If Firebase has a record but doesn't match Stripe, update Firebase record
       if (customerDb.data().stripe_customer_id !== stripeCustomerId) {
         await updateDoc(doc(db, "customers", uuid), {
           stripe_customer_id: stripeCustomerId,
         });
-        console.warn(
-          `Supabase customer record mismatched Stripe ID. Supabase record updated.`
+        console.log(
+          `Firebase customer record mismatched Stripe ID. Firebase record updated.`
         );
-        return stripeCustomerId;
-      } else {
-        console.warn(
-          `Supabase customer record was missing. A new record was created.`
-        );
-
-        // If Firebase has no record, create a new record and return Stripe customer ID
-        await upsertCustomerToFirebase(uuid, stripeCustomerId);
         return stripeCustomerId;
       }
+    } else {
+      console.log(
+        `Firebase customer record was missing. A new record was created.`
+      );
+
+      // If Firebase has no record, create a new record and return Stripe customer ID
+      await upsertCustomerToFirebase(uuid, stripeCustomerId);
+      return stripeCustomerId;
     }
     //
   } catch (error) {
@@ -249,26 +268,20 @@ const manageSubscriptionStatusChange = async (
     quantity: subscription.quantity,
     cancel_at_period_end: subscription.cancel_at_period_end,
     cancel_at: subscription.cancel_at
-      ? toDateTime(subscription.cancel_at).toISOString()
+      ? toDateTime(subscription.cancel_at)
       : null,
     canceled_at: subscription.canceled_at
-      ? toDateTime(subscription.canceled_at).toISOString()
+      ? toDateTime(subscription.canceled_at)
       : null,
-    current_period_start: toDateTime(
-      subscription.current_period_start
-    ).toISOString(),
-    current_period_end: toDateTime(
-      subscription.current_period_end
-    ).toISOString(),
-    created: toDateTime(subscription.created).toISOString(),
-    ended_at: subscription.ended_at
-      ? toDateTime(subscription.ended_at).toISOString()
-      : null,
+    current_period_start: toDateTime(subscription.current_period_start),
+    current_period_end: toDateTime(subscription.current_period_end),
+    created: toDateTime(subscription.created),
+    ended_at: subscription.ended_at ? toDateTime(subscription.ended_at) : null,
     trial_start: subscription.trial_start
-      ? toDateTime(subscription.trial_start).toISOString()
+      ? toDateTime(subscription.trial_start)
       : null,
     trial_end: subscription.trial_end
-      ? toDateTime(subscription.trial_end).toISOString()
+      ? toDateTime(subscription.trial_end)
       : null,
   };
 

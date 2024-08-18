@@ -5,7 +5,7 @@ import {
   SubscriptionWithProduct,
 } from "@/app/p/upgrade/_components/Pricing";
 import { db } from "@/lib/db/firebase";
-import { Product, Subscription } from "@/types/stripe";
+import { Price, Product, Subscription } from "@/types/stripe";
 import { auth, currentUser } from "@clerk/nextjs/server";
 import {
   collection,
@@ -57,21 +57,28 @@ export const getProducts = cache(async () => {
   const qPrices = query(
     collection(db, "prices"),
     where("active", "==", true),
-    orderBy("metadata", "desc"),
     orderBy("unit_amount", "desc")
   );
 
   const prices = await getDocs(qPrices);
-
-  const data = products.docs.map((ele) => {
+  const pData = prices.docs.map((ele) => {
     const d = ele.data();
-
-    const price = prices.docs.find((p) => p.id === ele.id);
 
     return {
       id: ele.id,
       ...d,
-      prices: [price?.data()],
+    } as Price;
+  });
+
+  const data = products.docs.map((ele) => {
+    const d = ele.data();
+
+    const price = pData.find((p) => p.product_id === d.id);
+
+    return {
+      id: ele.id,
+      ...d,
+      prices: [price],
     } as ProductWithPrices;
   });
 

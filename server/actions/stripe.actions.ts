@@ -58,15 +58,16 @@ export const calculateTrialEndUnixTimestamp = (
 
 export async function checkoutWithStripe(
   price: Price,
-  redirectPath: string = "/account"
+  redirectPath: string = "/pricing/success"
 ): Promise<CheckoutResponse> {
   try {
     // Get the user
     const user = await currentUser();
+    const { userId } = auth();
 
     // Get email
 
-    if (!user?.id) {
+    if (!userId) {
       throw new Error("User not authenticated");
     }
     // Retrieve or create the customer in Stripe
@@ -74,12 +75,16 @@ export async function checkoutWithStripe(
 
     try {
       customer = await createOrRetrieveCustomer({
-        uuid: user?.id || "",
-        email: user.primaryEmailAddress?.emailAddress || "",
+        uuid: userId,
+        email: user?.primaryEmailAddress?.emailAddress || "",
       });
     } catch (err) {
       console.error(err);
       throw new Error("Unable to access customer record.");
+    }
+
+    if (customer == undefined) {
+      throw new Error("Could not get customer.");
     }
 
     let params: Stripe.Checkout.SessionCreateParams = {
@@ -95,9 +100,10 @@ export async function checkoutWithStripe(
           quantity: 1,
         },
       ],
-      cancel_url: getURL(),
-      success_url: getURL(redirectPath),
+      cancel_url: process.env.BASE_URL,
+      success_url: process.env.BASE_URL + redirectPath,
     };
+
     console.log(
       "Trial end:",
       calculateTrialEndUnixTimestamp(price.trial_period_days)
@@ -134,6 +140,8 @@ export async function checkoutWithStripe(
       throw new Error("Unable to create checkout session.");
     }
   } catch (error) {
+    console.log(error);
+
     if (error instanceof Error) {
       return {
         errorRedirect: getErrorRedirect(
@@ -180,7 +188,7 @@ export async function createStripePortal(currentPath: string) {
     try {
       const { url } = await stripe.billingPortal.sessions.create({
         customer,
-        return_url: getURL("/account"),
+        return_url: process.env.BASE_URL + "/p/profile",
       });
       if (!url) {
         throw new Error("Could not create billing portal");
