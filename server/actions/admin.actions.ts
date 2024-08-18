@@ -27,12 +27,6 @@ export const toDateTime = (secs: number) => {
 };
 
 async function upsertProductRecord(product: Stripe.Product) {
-  const { userId } = auth();
-
-  if (!userId) {
-    throw new Error("User not authenticated");
-  }
-
   const productData: Product = {
     id: product.id,
     active: product.active,
