@@ -14,6 +14,7 @@ import {
   setDoc,
   where,
 } from "firebase/firestore";
+import { getSubscription } from "./queries.actions";
 
 /**
  * Creates a new flashcard with the given question, answer, and chapter ID.
@@ -45,7 +46,9 @@ export async function createFlashcard({
 
     const cardCount = await getFlashcardsCount(chapter_id);
 
-    if (cardCount >= 20) {
+    const subscription = await getSubscription();
+
+    if (cardCount >= 20 && !subscription) {
       throw new Error("You have reached the maximum number of flashcards");
     }
 

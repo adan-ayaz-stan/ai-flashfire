@@ -14,6 +14,7 @@ import {
   setDoc,
   where,
 } from "firebase/firestore";
+import { getSubscription } from "./queries.actions";
 
 /**
  * Creates a new table in the database.
@@ -26,6 +27,14 @@ export async function createTable(title: string) {
 
   if (!userId) {
     throw new Error("User not authenticated");
+  }
+
+  const tableCount = await getTablesCount();
+
+  const subscription = await getSubscription();
+
+  if (tableCount >= 3 && !subscription) {
+    throw new Error("You have reached the maximum number of tables");
   }
 
   try {
@@ -101,7 +110,7 @@ export async function getTablesCount() {
     const q = query(collection(db, "tables"), where("userId", "==", userId));
     const snap = await getCountFromServer(q);
 
-    const count = snap.data().count
+    const count = snap.data().count;
 
     return count;
   } catch (err) {

@@ -13,6 +13,7 @@ import {
   setDoc,
   where,
 } from "firebase/firestore";
+import { getSubscription } from "./queries.actions";
 
 /**
  * Creates a new chapter in the database with the given title and book ID.
@@ -34,6 +35,13 @@ export async function createChapter({
 
   if (!userId) {
     throw new Error("User not authenticated");
+  }
+
+  const chapterCount = await getChapterCount(book_id);
+  const subscription = await getSubscription();
+
+  if (chapterCount >= 5 && !subscription) {
+    throw new Error("You have reached the maximum number of chapters");
   }
 
   try {

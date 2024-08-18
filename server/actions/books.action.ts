@@ -14,6 +14,7 @@ import {
   setDoc,
   where,
 } from "firebase/firestore";
+import { getSubscription } from "./queries.actions";
 
 /**
  * Creates a new book in the database with the given title and table ID.
@@ -39,7 +40,9 @@ export async function createBook({
 
   const bookCount = await getBooksCount(table_id);
 
-  if (bookCount >= 3) {
+  const subscription = await getSubscription();
+
+  if (bookCount >= 3 && !subscription) {
     throw new Error("You have reached the maximum number of books");
   }
 
