@@ -1,10 +1,19 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
+import { getSubscription } from "@/server/actions/queries.actions";
 import { SignOutButton } from "@clerk/nextjs";
+import { useQuery } from "@tanstack/react-query";
 import { Crown, UserIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
 export default function Navbar() {
+  const { data: subscription } = useQuery({
+    queryKey: ["user", "subscription"],
+    queryFn: () => getSubscription(),
+  });
+
   return (
     <div className="w-full fixed top-0 left-0 flex items-center gap-4 p-8 py-3 text-davy bg-coolWhite border-b-2 border-fire z-50">
       {/* Logo */}
@@ -20,12 +29,14 @@ export default function Navbar() {
           Flash<span className="text-fire">firE</span>
         </h2>
       </Link>
-      <Link
-        href={"/p/upgrade"}
-        className="p-4 rounded-md flex items-center gap-2 text-red-500 tracking-widest h-8 hover:bg-red-100 transition-all duration-500"
-      >
-        <Crown className="h-6 w-6" /> <h3>Upgrade</h3>
-      </Link>
+      {!subscription && (
+        <Link
+          href={"/p/upgrade"}
+          className="p-4 rounded-md flex items-center gap-2 text-red-500 tracking-widest h-8 hover:bg-red-100 transition-all duration-500"
+        >
+          <Crown className="h-6 w-6" /> <h3>Upgrade</h3>
+        </Link>
+      )}
 
       <Link
         href={"/"}

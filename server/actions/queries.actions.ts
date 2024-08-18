@@ -27,9 +27,9 @@ export const getSubscription = cache(async () => {
   const { userId } = auth();
 
   const q = query(
-    collection(db, "users"),
-    where("userId", "==", userId),
-    where("status", "==", "active")
+    collection(db, "subscriptions"),
+    where("subscription.user_id", "==", userId),
+    where("subscription.status", "==", "active")
   );
   const subscription = await getDocs(q);
 

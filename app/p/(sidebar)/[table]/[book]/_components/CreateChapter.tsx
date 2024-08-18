@@ -31,6 +31,7 @@ import {
   getChapterCount,
 } from "@/server/actions/chapters.action";
 import PaidModal from "../../../dashboard/_components/paidModal";
+import { getSubscription } from "@/server/actions/queries.actions";
 
 const formSchema = z.object({
   chapter_name: z.string().min(2).max(50),
@@ -59,6 +60,11 @@ export default function CreateChapter({
   } = useQuery({
     queryKey: ["chapter", "all", book_id, "count"],
     queryFn: () => getChapterCount(book_id),
+  });
+
+  const { data: subscription } = useQuery({
+    queryKey: ["user", "subscription"],
+    queryFn: () => getSubscription(),
   });
 
   // 1. Define your form.
@@ -101,7 +107,7 @@ export default function CreateChapter({
     });
   }
 
-  if (count && count >= 5) {
+  if (count && count >= 5 && !subscription) {
     return (
       <PaidModal featureRequest="You have reached the limit of 5 chapters. Upgrade to unlock more features.">
         <Button variant="outline">Create Chapter</Button>

@@ -36,7 +36,10 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
 import pdfToText from "react-pdftotext";
 import { toast } from "sonner";
-import { useQueryClient } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { getSubscription } from "@/server/actions/queries.actions";
+import { getFlashcardsCount } from "@/server/actions/flashcards.action";
+import Link from "next/link";
 
 const formSchema = z.object({
   text: z.string().max(12000),
@@ -87,6 +90,11 @@ export default function CreateAIFlashcards({
   const dialogRef = useRef<HTMLButtonElement>(null);
   const queryClient = useQueryClient();
 
+  const { data: subscription } = useQuery({
+    queryKey: ["user", "subscription"],
+    queryFn: () => getSubscription(),
+  });
+
   // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -117,12 +125,37 @@ export default function CreateAIFlashcards({
     // Generate text chunks of 500 characters
     const chunks = chunkText(valueText);
 
-    toast.info("Possible flashcards to generate: " + chunks.length * 5);
+    const possibleFlashcards = chunks.length * 5;
+    toast.info("Possible flashcards to generate: " + possibleFlashcards);
+
+    const countExistingCards = await getFlashcardsCount(chapter_id);
+
+    if (countExistingCards + possibleFlashcards > 20 && !subscription) {
+      toast.error(
+        "Cannot add more than 20 flashcards. Please either upgrade or reduce content.",
+        {
+          id: "flashcards-generate",
+          action: (
+            <Link
+              href="/p/upgrade"
+              onClick={() => {
+                toast.dismiss("flashcards-generate");
+                dialogRef.current?.click();
+              }}
+            >
+              <Button variant="red">Upgrade</Button>
+            </Link>
+          ),
+          duration: 10000,
+        }
+      );
+      return;
+    }
 
     let generatedCardsLength = 0;
 
     toast.loading(
-      `Generating flashcards... ${generatedCardsLength}/${chunks.length * 5}`,
+      `Generating flashcards... ${generatedCardsLength}/${possibleFlashcards}`,
       { id: "flashcards-generate" }
     );
 

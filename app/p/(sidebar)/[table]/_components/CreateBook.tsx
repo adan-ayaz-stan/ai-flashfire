@@ -28,6 +28,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Loader } from "lucide-react";
 import { createBook, getBooksCount } from "@/server/actions/books.action";
 import PaidModal from "../../dashboard/_components/paidModal";
+import { getSubscription } from "@/server/actions/queries.actions";
 
 const formSchema = z.object({
   book_name: z.string().min(2).max(50),
@@ -49,6 +50,11 @@ export default function CreateBook({
   const { data: count } = useQuery({
     queryKey: ["book", "all", table_id, "count"],
     queryFn: () => getBooksCount(table_id),
+  });
+
+  const { data: subscription } = useQuery({
+    queryKey: ["user", "subscription"],
+    queryFn: () => getSubscription(),
   });
 
   // 1. Define your form.
@@ -87,13 +93,11 @@ export default function CreateBook({
     });
   }
 
-  console.log(count);
-
   if (count == undefined) {
     return null;
   }
 
-  if (count && count >= 3) {
+  if (count && count >= 3 && !subscription) {
     return (
       <PaidModal featureRequest="You have reached the limit of 3 tables. Upgrade to unlock more features.">
         <Button variant="outline">Create Table</Button>

@@ -27,6 +27,8 @@ import {
   getUser,
 } from "@/server/actions/queries.actions";
 import Pricing from "./_components/Pricing";
+import Navbar from "@/app/(landing)/_components/Navbar";
+import Link from "next/link";
 
 export default async function Upgrade() {
   const [products, subscription] = await Promise.all([
@@ -35,23 +37,19 @@ export default async function Upgrade() {
   ]);
 
   return (
-    <div className="relative">
-      <div className="flex flex-wrap text-fire justify-center items-center p-4 w-screen h-screen absolute top-0 left-0 overflow-hidden">
-        <div className="w-[150%] h-[150%] -rotate-[20deg] absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-40">
-          <Image
-            src="/UpgradeBG.svg"
-            layout="fill"
-            objectFit="contain"
-            objectPosition="center"
-            alt="upgrade Background"
-          />
+    <div className="relative p-4 md:p-8 bg-[url('/UpgradeBG.svg')] bg-cover bg-center bg-opacity-70 min-h-screen">
+      <div className="z-[20]  max-w-7xl mx-auto bg-white p-4 rounded-xl border-fire border-2">
+        <div className="flex flex-col md:flex-row gap-4 justify-between">
+          <div>
+            Upgrade to Pro to enjoy unlimited generations and no limits.
+          </div>
+          <Link href={"/p/dashboard"}>
+            <Button variant={"red"}>Go Home</Button>
+          </Link>
         </div>
-      </div>
-      <div className="z-[20] w-[75%] absolute top-1/2 left-1/2 -translate-x-1/2 translate-y-1/2 bg-white p-4 rounded-xl border-fire border-2">
-        <div>Upgrade to Pro to enjoy unlimited generations and no limits.</div>
         <div className="w-full h-[1px] bg-fire my-2"></div>
         <div className="flex flex-col ">
-          <div className="flex gap-2" key={"heading"}>
+          {/* <div className="flex gap-2" key={"heading"}>
             <div className="flex grow items-center gap-1">Features</div>
             <div className="w-[1px] h-full bg-fire"></div>
             <div className="w-20 p-2 text-center bg-gray-200 rounded-lg">
@@ -75,7 +73,7 @@ export default async function Upgrade() {
           ))}
           <Button className="w-[max-content] self-center mt-4 px-10">
             Upgrade
-          </Button>
+          </Button> */}
 
           <Pricing products={products ?? []} subscription={subscription} />
         </div>

@@ -5,6 +5,7 @@ import { getStripe } from "@/lib/payment/stripe.client";
 import { cn } from "@/lib/utils";
 import {
   checkoutWithStripe,
+  createStripePortal,
   getErrorRedirect,
 } from "@/server/actions/stripe.actions";
 import { Price, Product, Subscription } from "@/types/stripe";
@@ -13,6 +14,7 @@ import { User } from "@clerk/nextjs/server";
 import { Cloud } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
+import { toast } from "sonner";
 
 type TProduct = Product;
 type TPrice = Price;
@@ -86,6 +88,23 @@ export default function Pricing({ products, subscription }: Props) {
     setPriceIdLoading(undefined);
   };
 
+  const handleManageSubscription = async () => {
+    toast.loading("Redirecting to your subscription portal...", {
+      id: "sub-portal",
+    });
+    const url = await createStripePortal("/p/upgrade");
+
+    if (url) {
+      router.push(url);
+    } else {
+      toast.error(
+        "Error redirecting to subscription portal. Please try again."
+      );
+    }
+
+    toast.dismiss("sub-portal");
+  };
+
   if (!products.length) {
     return (
       <section className="bg-black">
@@ -115,10 +134,6 @@ export default function Pricing({ products, subscription }: Props) {
             <h1 className="text-4xl font-extrabold sm:text-center sm:text-6xl">
               Pricing Plans
             </h1>
-            <p className="max-w-2xl m-auto mt-5 text-xl text-zinc-800 sm:text-center sm:text-2xl">
-              Start building for free, then add a site plan to go live. Account
-              plans unlock additional features.
-            </p>
             <div className="relative self-center mt-6 bg-coolWhite rounded-lg p-0.5 flex sm:mt-8 border border-zinc-800">
               {intervals.includes("month") && (
                 <button
@@ -126,7 +141,7 @@ export default function Pricing({ products, subscription }: Props) {
                   type="button"
                   className={`${
                     billingInterval === "month"
-                      ? "relative w-1/2 bg-fire shadow-sm text-white"
+                      ? "relative w-1/2 bg-davy shadow-sm text-white"
                       : "ml-0.5 relative w-1/2 border border-transparent text-zinc-400"
                   } rounded-md m-1 py-2 text-sm font-medium whitespace-nowrap focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-opacity-50 focus:z-10 sm:w-auto sm:px-8`}
                 >
@@ -191,7 +206,13 @@ export default function Pricing({ products, subscription }: Props) {
                       variant="red"
                       type="button"
                       disabled={priceIdLoading === price.id}
-                      onClick={() => handleStripeCheckout(price)}
+                      onClick={() => {
+                        if (subscription) {
+                          handleManageSubscription();
+                        } else {
+                          handleStripeCheckout(price);
+                        }
+                      }}
                       className="block w-full py-2 mt-8 text-sm font-semibold text-center text-white rounded-md"
                     >
                       {subscription ? "Manage" : "Subscribe"}

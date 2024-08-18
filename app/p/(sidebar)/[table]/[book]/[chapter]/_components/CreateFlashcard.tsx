@@ -65,12 +65,9 @@ export default function CreateFlashcard({
       });
     },
     onError(error, variables, context) {
-      toast.error(
-        "Error creating flashcard " + variables.question.slice(0, 10) + "...",
-        {
-          id: "create-flashcard",
-        }
-      );
+      toast.error("Error creating flashcard: " + error.message + "...", {
+        id: "create-flashcard",
+      });
     },
     onSuccess(data, variables, context) {
       toast.success("Flashcard added!", { id: "create-flashcard" });

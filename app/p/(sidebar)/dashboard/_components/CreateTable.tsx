@@ -31,6 +31,7 @@ import {
 } from "../../../../../server/actions/tables.action";
 import { Loader } from "lucide-react";
 import PaidModal from "./paidModal";
+import { getSubscription } from "@/server/actions/queries.actions";
 
 const formSchema = z.object({
   table_name: z.string().min(2).max(50),
@@ -49,6 +50,11 @@ export default function CreateTable({
   const { data: count } = useQuery({
     queryKey: ["table", "all", "count"],
     queryFn: () => getTablesCount(),
+  });
+
+  const { data: subscription } = useQuery({
+    queryKey: ["user", "subscription"],
+    queryFn: () => getSubscription(),
   });
 
   // 1. Define your form.
@@ -83,7 +89,7 @@ export default function CreateTable({
       queryKey: ["table", "all"],
     });
   }
- if (count && count >= 3) {
+  if (count && count >= 3 && !subscription) {
     return (
       <PaidModal featureRequest="You have reached the limit of 3 tables. Upgrade to unlock more features.">
         <Button variant="outline">Create Table</Button>

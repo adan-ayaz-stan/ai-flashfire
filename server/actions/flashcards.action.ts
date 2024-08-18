@@ -43,6 +43,12 @@ export async function createFlashcard({
     //
     const slug = randomUUID().replace(/-/g, "_");
 
+    const cardCount = await getFlashcardsCount(chapter_id);
+
+    if (cardCount >= 20) {
+      throw new Error("You have reached the maximum number of flashcards");
+    }
+
     await setDoc(
       doc(db, "flashcards", slug),
       {
