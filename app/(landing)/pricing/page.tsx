@@ -50,9 +50,7 @@ export default function PricingPage() {
         </Table>
 
         <h2 className="text-center">
-          {" "}
-          Automatic Upgrade is unavailable at the moment.
-          <br /> Please contact{" "}
+           Please contact{" "}
           <Link
             href={"mailto:adanayaztracer@gmail.com"}
             className="font-bold text-fire underline"

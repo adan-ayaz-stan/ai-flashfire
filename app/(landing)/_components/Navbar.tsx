@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -30,7 +31,7 @@ export default function Navbar() {
         <Link href={"/pricing"}>
           <Button
             variant={"link"}
-            className="text-white text-md hover:text-gray-200"
+            className="text-white/80 text-md hover:text-white"
           >
             Pricing
           </Button>
@@ -38,22 +39,21 @@ export default function Navbar() {
         <Link href={"/sign-up"}>
           <Button
             variant={"link"}
-            className="text-white text-md hover:text-gray-200"
+            className="text-white/80 text-md hover:text-white"
           >
             Sign Up
           </Button>
         </Link>
         <Link href={"/sign-in"}>
-          <Button className="h-9 px-4 text-md bg-white text-[#0C1A3C] hover:bg-[#0A142A] hover:text-white rounded-full">
+          <Button className="h-9 px-4 text-md bg-white text-[#0C1A3C] hover:text-white rounded-full">
             Sign In
           </Button>
         </Link>
       </div>
 
-      {/* Dropdown */}
-      <DropdownMenu>
-        <DropdownMenuTrigger className="md:hidden">
-          <svg
+      <Dialog>
+        <DialogTrigger className="md:hidden">
+        <svg
             xmlns="http://www.w3.org/2000/svg"
             width="32"
             height="32"
@@ -67,37 +67,31 @@ export default function Navbar() {
               clip-rule="evenodd"
             />
           </svg>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent className="bg-davy">
-          <DropdownMenuItem className="w-full">
-            <Link href={"/pricing"} className="w-full">
+        </DialogTrigger>
+        <DialogContent className="bg-davy text-white w-4/5 rounded-2xl">
+        <Link href={"/pricing"} className="w-full">
               <Button
                 variant={"link"}
-                className="w-full text-white text-md hover:text-black"
+                className="w-full text-white/80 text-md hover:text-white"
               >
                 Pricing
               </Button>
             </Link>
-          </DropdownMenuItem>
-          <DropdownMenuItem className="w-full">
             <Link href={"/sign-up"} className="w-full">
               <Button
                 variant={"link"}
-                className="w-full text-white text-md hover:text-black"
+                className="w-full text-white/80 text-md hover:text-white"
               >
                 Sign Up
               </Button>
             </Link>
-          </DropdownMenuItem>
-          <DropdownMenuItem className="w-full">
             <Link href={"/sign-in"} className="w-full">
-              <Button className="w-full h-9 px-4 text-md bg-white text-[#0C1A3C] hover:bg-[#0A142A] hover:text-white rounded-full">
+              <Button className="w-full h-9 px-4 text-md bg-white text-[#0C1A3C] hover:text-white rounded-full">
                 Sign In
               </Button>
             </Link>
-          </DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
