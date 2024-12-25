@@ -1,5 +1,6 @@
 "use client";
 
+import { CheckMark } from "@/app/(landing)/pricing/_components/CheckMark";
 import { Button } from "@/components/ui/button";
 import { getStripe } from "@/lib/payment/stripe.client";
 import { cn } from "@/lib/utils";
@@ -35,6 +36,15 @@ interface Props {
 }
 
 type BillingInterval = "lifetime" | "year" | "month";
+
+const features = [
+  { feature: "Table Creation Limit", free: "3", paid: "No Limit" },
+  { feature: "Book Creation Limit", free: "3", paid: "No Limit" },
+  { feature: "Chapter Creation Limit", free: "5", paid: "No Limit" },
+  { feature: "AI Flashcard Generation Limit", free: "5", paid: "No Limit" },
+  { feature: "Test Creation Limit", free: "3", paid: "No Limit" },
+  { feature: "Support Priority", free: "Standard", paid: "High" },
+];
 
 export default function Pricing({ products, subscription }: Props) {
   const { user } = useUser();
@@ -128,10 +138,10 @@ export default function Pricing({ products, subscription }: Props) {
     );
   } else {
     return (
-      <section className="bg-white">
+      <section className="bg-white/10 rounded-2xl backdrop-blur-lg">
         <div className="max-w-6xl px-4 py-8 mx-auto sm:py-24 sm:px-6 lg:px-8">
           <div className="sm:flex sm:flex-col sm:align-center">
-            <h1 className="text-4xl font-extrabold sm:text-center sm:text-6xl">
+            <h1 className="text-4xl font-extrabold text-white sm:text-center sm:text-6xl">
               Pricing Plans
             </h1>
             <div className="relative self-center mt-6 bg-coolWhite rounded-lg p-0.5 flex sm:mt-8 border border-zinc-800">
@@ -178,7 +188,7 @@ export default function Pricing({ products, subscription }: Props) {
                 <div
                   key={product.id}
                   className={cn(
-                    "flex flex-col rounded-lg shadow-sm divide-y divide-zinc-600 bg-zinc-900",
+                    "flex flex-col rounded-lg shadow-sm divide-y divide-zinc-600 bg-cyan-400 text-black",
                     {
                       "border border-pink-500": subscription
                         ? product.name === subscription?.prices?.products?.name
@@ -202,6 +212,20 @@ export default function Pricing({ products, subscription }: Props) {
                         /{billingInterval}
                       </span>
                     </p>
+                    <p>Limitless plan for subscribed users</p>
+
+                    <ul className="space-y-3 mt-4">
+                      {features.map((feat) => {
+                        return (
+                          <li
+                            key={feat.feature}
+                            className="flex items-center gap-2"
+                          >
+                            <CheckMark /> {feat.paid} {feat.feature}
+                          </li>
+                        );
+                      })}
+                    </ul>
                     <Button
                       variant="red"
                       type="button"

@@ -59,7 +59,7 @@ export default function PricingPage() {
           </div>
           <div className="p-4 w-full max-w-xs bg-cyan-400 text-black rounded-xl">
             <strong>Expanded</strong>
-            <h2 className="my-4">$ 5.99</h2>
+            <h2 className="my-4">$ 4.99</h2>
             <p>Limitless plan for subscribed users</p>
 
             <ul className="space-y-3 mt-4">
