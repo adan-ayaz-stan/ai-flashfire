@@ -49,7 +49,7 @@ export async function GET(
     }
 
     // If flashcards length is more than 10, select 10 random flashcards
-    if (flashcardCount > 10) {
+    if (flashcardCount >= 10) {
       const flashcardIndex = Math.floor(Math.random() * flashcardCount);
       const selectedFlashcards = flashcards.slice(
         flashcardIndex,
