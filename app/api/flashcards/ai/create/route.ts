@@ -28,11 +28,11 @@ export async function POST(req: Request) {
     const { text_chunk, chapter_id } = await req.json();
 
     const response = await generateObject({
-      model: mistral("mistral-small-latest"),
+      model: mistral("mistral-large-latest"),
       schema: flashcardSchema,
       schemaDescription:
         "This is the flashcard schema. It's an array of objects whose properties are `question` and `answer`.",
-      system: `You are a flashcard generator. You'll be given a text chunk which you will try to make sense of and you'll generate flashcards from it upto 5. Each flashcard must be in format { question: string; answer: string } and you will generate an array of these flashcards.`,
+      system: `You are a flashcard generator. YOU ALWAYS RETURN AN ARRAY OF FLASHCARDS, NEVER AN OBJECT. You'll be given a text chunk which you will try to make sense of and you'll generate flashcards from it upto 5. Each flashcard must be in format { question: string; answer: string } and you MUST generate an array of these flashcards as [{question: string; answer: string;}].`,
       prompt:
         "Generate flashcards from the following text chunk: " + text_chunk,
     });
