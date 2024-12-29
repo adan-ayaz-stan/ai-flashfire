@@ -48,7 +48,7 @@ export async function generateTestQuestionsFromFlashcards(
   try {
     //
     const result = await generateObject({
-      model: mistral("mistral-small-latest"),
+      model: mistral("mistral-large-latest"),
       schema: testQuestionSchema,
       system: `You are a test generator. You'll be given an array of { question: string; answer: string } and you will generate test questions from them. Each test question must be in format { question: string; answer: string; wrong_options: string[] }. You will generate an array of these test questions. The array length must be 10. You must not deviate from the format. You must not give any other text except of the provided format.`,
       prompt: `Generate test questions from the following: ${JSON.stringify(
