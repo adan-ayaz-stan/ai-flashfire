@@ -14,7 +14,11 @@ export default function FifthSection() {
                 support you need to achieve your learning goals.
               </p>
             </div>
-            <div className="flex lg:w-2/3 w-full sm:flex-row flex-col mx-auto px-8 sm:space-x-4 sm:space-y-0 space-y-4 sm:px-0 items-end">
+            <form
+              action="https://formspree.io/f/xvggqqgy"
+              method="POST"
+              className="flex lg:w-2/3 w-full sm:flex-row flex-col mx-auto px-8 sm:space-x-4 sm:space-y-0 space-y-4 sm:px-0 items-end"
+            >
               <div className="relative flex-grow w-full">
                 <label
                   htmlFor="full-name"
@@ -43,7 +47,7 @@ export default function FifthSection() {
               <Button variant={"outline"} className="border-none">
                 Send
               </Button>
-            </div>
+            </form>
           </div>
         </section>
       </div>
