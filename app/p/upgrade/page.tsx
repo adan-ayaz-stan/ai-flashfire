@@ -36,9 +36,10 @@ export default async function Upgrade() {
     getSubscription(),
   ]);
 
+  // bg-[url('/UpgradeBG.svg')]
   return (
-    <div className="relative p-4 md:p-8 bg-[url('/UpgradeBG.svg')] bg-cover bg-center bg-opacity-70 min-h-screen">
-      <div className="z-[20]  max-w-7xl mx-auto bg-white bg-[url('https://img.freepik.com/free-vector/flat-design-red-polka-dot-background_23-2149529614.jpg?semt=ais_hybrid')] bg-repeat p-4 rounded-xl border-fire border-2">
+    <div className="relative p-4 md:p-8 bg-[url('https://t4.ftcdn.net/jpg/02/42/58/81/360_F_242588176_E6NpLUAgb8qTGAa6Sb4s66fkLDJJ5XC9.jpg')] bg-repeat bg-center bg-opacity-70 min-h-screen">
+      <div className="z-[20]  max-w-7xl mx-auto bg-white p-4 rounded-xl border-fire border-2">
         <div className="flex flex-col md:flex-row gap-4 justify-between">
           <div className="text-white"></div>
           <Link href={"/p/dashboard"}>
